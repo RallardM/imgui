@@ -7193,8 +7193,8 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         {
             IM_ASSERT(window->IDStack.Size == 1);
             window->IDStack.Size = 0; // As window->IDStack[0] == window->ID here, make sure TestEngine doesn't erroneously see window as parent of itself.
-            IMGUI_TEST_ENGINE_ITEM_ADD(window->ID, window->Rect(), NULL);
-            IMGUI_TEST_ENGINE_ITEM_INFO(window->ID, window->Name, (g.HoveredWindow == window) ? ImGuiItemStatusFlags_HoveredRect : 0);
+            IMGUI_TEST_CORE_ITEM_ADD(window->ID, window->Rect(), NULL);
+            IMGUI_TEST_CORE_ITEM_INFO(window->ID, window->Name, (g.HoveredWindow == window) ? ImGuiItemStatusFlags_HoveredRect : 0);
             window->IDStack.Size = 1;
         }
 #endif
@@ -7492,7 +7492,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         // [Test Engine] Register title bar / tab with MoveId.
 #ifdef IMGUI_ENABLE_TEST_ENGINE
         if (!(window->Flags & ImGuiWindowFlags_NoTitleBar))
-            IMGUI_TEST_ENGINE_ITEM_ADD(g.LastItemData.ID, g.LastItemData.Rect, &g.LastItemData);
+            IMGUI_TEST_CORE_ITEM_ADD(g.LastItemData.ID, g.LastItemData.Rect, &g.LastItemData);
 #endif
     }
     else
@@ -8992,7 +8992,7 @@ bool ImGui::TestShortcutRouting(ImGuiKeyChord key_chord, ImGuiID owner_id)
 }
 
 // Note that Dear ImGui doesn't know the meaning/semantic of ImGuiKey from 0..511: they are legacy native keycodes.
-// Consider transitioning from 'IsKeyDown(MY_ENGINE_KEY_A)' (<1.87) to IsKeyDown(ImGuiKey_A) (>= 1.87)
+// Consider transitioning from 'IsKeyDown(MY_CORE_KEY_A)' (<1.87) to IsKeyDown(ImGuiKey_A) (>= 1.87)
 bool ImGui::IsKeyDown(ImGuiKey key)
 {
     return IsKeyDown(key, ImGuiKeyOwner_Any);
@@ -10363,7 +10363,7 @@ bool ImGui::ItemAdd(const ImRect& bb, ImGuiID id, const ImRect* nav_bb_arg, ImGu
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
     if (id != 0)
-        IMGUI_TEST_ENGINE_ITEM_ADD(id, g.LastItemData.NavRect, &g.LastItemData);
+        IMGUI_TEST_CORE_ITEM_ADD(id, g.LastItemData.NavRect, &g.LastItemData);
 #endif
 
     // Clipping test
@@ -20665,7 +20665,7 @@ void ImGui::DebugLogV(const char* fmt, va_list args)
         IMGUI_DEBUG_PRINTF("%s", g.DebugLogBuf.begin() + old_size);
 #ifdef IMGUI_ENABLE_TEST_ENGINE
     if (g.DebugLogFlags & ImGuiDebugLogFlags_OutputToTestEngine)
-        IMGUI_TEST_ENGINE_LOG("%s", g.DebugLogBuf.begin() + old_size);
+        IMGUI_TEST_CORE_LOG("%s", g.DebugLogBuf.begin() + old_size);
 #endif
 }
 
